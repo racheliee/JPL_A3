@@ -175,7 +175,7 @@ public class ApplicationForm {
 		majorLabel.setFont(new Font("PingFang TC", Font.PLAIN, 12));
 		personalInfoPanel.add(majorLabel);
 
-		JComboBox<String> majorBox = new JComboBox<String>();
+		majorBox = new JComboBox<String>();
 		majorBox.setModel(new DefaultComboBoxModel<String>(
 				new String[] { "Choose a major", "Accounting", "Biology", "Computer Science", "Business", "Engineering",
 						"Education", "Math", "Nursing", "Physics", "Political Science" }));
@@ -344,11 +344,13 @@ public class ApplicationForm {
 							errorCount++;
 						}
 					}
+					
 					// if an error exists in the major field
 					if (!isValidMajor()) {
 						errorMessage += errorCount + getMajorErrorMessage();
 						errorCount++;
 					}
+					
 					// if error exists in the home address field
 					if (!isValidAddy(homeAddy)) {
 						errorMessage += errorCount + getAddyErrorMessage(homeAddy);
@@ -507,7 +509,7 @@ public class ApplicationForm {
 
 	// checks if the major selected is valid
 	public boolean isValidMajor() {
-		if (majorBox.getSelectedItem().equals("Choose a major")) {
+		if (majorBox.getSelectedIndex() == 0) {
 			return false;
 		} else {
 			return true;
