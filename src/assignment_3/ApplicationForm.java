@@ -42,8 +42,6 @@ public class ApplicationForm {
 	private JLabel characterLabel;
 	private JLabel phoneLabel;
 	private JTextArea phoneText;
-	private JLabel skkuImage_1;
-	private JLabel characterLabel_1;
 
 	/**
 	 * Launch the application.
@@ -73,7 +71,7 @@ public class ApplicationForm {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 955, 572);
+		frame.setBounds(100, 100, 815, 798);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -81,36 +79,25 @@ public class ApplicationForm {
 		characterLabel = new JLabel("");
 		characterLabel.setIcon(
 				new ImageIcon(ApplicationForm.class.getResource("/images/IMG_2402-removebg-preview_resized.png")));
-		characterLabel.setBounds(-28, 299, 196, 246);
+		characterLabel.setBounds(-33, 518, 196, 246);
 		frame.getContentPane().add(characterLabel);
-
-		characterLabel_1 = new JLabel("");
-		characterLabel_1.setIcon(
-				new ImageIcon(ApplicationForm.class.getResource("/images/IMG_2400-removebg-preview_resize.png")));
-		characterLabel_1.setBounds(739, 332, 210, 213);
-		frame.getContentPane().add(characterLabel_1);
 
 		// add image of skku on the left and right
 		skkuImage = new JLabel("");
-		skkuImage.setIcon(new ImageIcon(ApplicationForm.class.getResource("/images/skku_wallpaper.png")));
-		skkuImage.setBounds(0, -12, 221, 563);
+		skkuImage.setIcon(new ImageIcon(ApplicationForm.class.getResource("/images/IMG_0830.jpg")));
+		skkuImage.setBounds(-77, 0, 387, 800);
 		frame.getContentPane().add(skkuImage);
-
-		skkuImage_1 = new JLabel("");
-		skkuImage_1.setIcon(new ImageIcon(ApplicationForm.class.getResource("/images/skku_wallpaper.png")));
-		skkuImage_1.setBounds(735, -12, 221, 563);
-		frame.getContentPane().add(skkuImage_1);
 
 		// add form title at the top
 		applicationFormLabel = new JLabel("");
 		applicationFormLabel
 				.setIcon(new ImageIcon(ApplicationForm.class.getResource("/images/title_label-removebg-preview.png")));
-		applicationFormLabel.setBounds(279, 0, 422, 88);
+		applicationFormLabel.setBounds(340, 0, 422, 88);
 		frame.getContentPane().add(applicationFormLabel);
 
 		// stores the fields related to personal information
 		personalInfoPanel = new JPanel();
-		personalInfoPanel.setBounds(244, 81, 436, 253);
+		personalInfoPanel.setBounds(350, 88, 436, 253);
 		frame.getContentPane().add(personalInfoPanel);
 		personalInfoPanel.setLayout(new GridLayout(0, 2, 0, 15));
 
@@ -188,20 +175,20 @@ public class ApplicationForm {
 
 		// create a personal statement panel
 		personalStatementPanel = new JPanel();
-		personalStatementPanel.setBounds(254, 338, 485, 177);
+		personalStatementPanel.setBounds(301, 363, 485, 352);
 		frame.getContentPane().add(personalStatementPanel);
 		personalStatementPanel.setLayout(null);
 
 		personalStatementLabel = new JLabel("Personal Statement");
 		personalStatementLabel.setFont(new Font("PingFang TC", Font.PLAIN, 13));
 		personalStatementLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		personalStatementLabel.setBounds(112, 6, 205, 33);
+		personalStatementLabel.setBounds(169, 6, 205, 33);
 		personalStatementPanel.add(personalStatementLabel);
 
 		personalStatementText = new JTextArea();
 		personalStatementText.setFont(new Font("Times New Roman", Font.ITALIC, 12));
 		personalStatementText.setText(" At least 100 words");
-		personalStatementText.setBounds(6, 34, 433, 132);
+		personalStatementText.setBounds(46, 34, 439, 300);
 		personalStatementPanel.add(personalStatementText);
 
 		// create submit button
@@ -239,7 +226,7 @@ public class ApplicationForm {
 			}
 		});
 		submitBtn.setFont(new Font("PingFang TC", Font.PLAIN, 12));
-		submitBtn.setBounds(395, 509, 164, 29);
+		submitBtn.setBounds(473, 727, 164, 29);
 		frame.getContentPane().add(submitBtn);
 
 	}
