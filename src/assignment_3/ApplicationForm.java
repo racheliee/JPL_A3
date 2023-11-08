@@ -19,10 +19,11 @@ import javax.swing.JRadioButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class ApplicationForm {
 
-	private JFrame frame;
+	private JFrame frmSkkuNewStudent;
 	private JPanel personalInfoPanel;
 	private JLabel nameLabel;
 	private JLabel gpaLabel;
@@ -52,13 +53,12 @@ public class ApplicationForm {
 	private JRadioButton emailButton;
 	private JRadioButton mobileButton;
 	private JRadioButton noneButton;
-	
-	//flag to keep track if it is the applicant's first time clicking the personal statement box
-	private boolean firstClick = true; 
 	private JLabel majorLabel;
-	private JComboBox comboBox;
-	private JLabel addyLabel_1;
-	private JTextArea addyText_1;
+	private JComboBox<String> majorBox;
+	private JLabel countryLabel;
+	private JTextArea countryText;
+	// flag to keep track if it is the applicant's first time clicking the personal statement box
+	private boolean firstClick = true;
 
 	/**
 	 * Launch the application.
@@ -68,7 +68,7 @@ public class ApplicationForm {
 			public void run() {
 				try {
 					ApplicationForm window = new ApplicationForm();
-					window.frame.setVisible(true);
+					window.frmSkkuNewStudent.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -87,35 +87,36 @@ public class ApplicationForm {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 815, 821);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmSkkuNewStudent = new JFrame();
+		frmSkkuNewStudent.setTitle("SKKU New Student Enrollment");
+		frmSkkuNewStudent.setBounds(100, 100, 815, 821);
+		frmSkkuNewStudent.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmSkkuNewStudent.getContentPane().setLayout(null);
 
 		// add the characters on each side
 		characterLabel = new JLabel("");
 		characterLabel.setIcon(
 				new ImageIcon(ApplicationForm.class.getResource("/images/IMG_2402-removebg-preview_resized.png")));
 		characterLabel.setBounds(-32, 541, 196, 246);
-		frame.getContentPane().add(characterLabel);
+		frmSkkuNewStudent.getContentPane().add(characterLabel);
 
 		// add image of skku on the left and right
 		skkuImage = new JLabel("");
 		skkuImage.setIcon(new ImageIcon(ApplicationForm.class.getResource("/images/IMG_0830.jpg")));
 		skkuImage.setBounds(-77, 0, 387, 800);
-		frame.getContentPane().add(skkuImage);
+		frmSkkuNewStudent.getContentPane().add(skkuImage);
 
 		// add form title at the top
 		applicationFormLabel = new JLabel("");
 		applicationFormLabel
 				.setIcon(new ImageIcon(ApplicationForm.class.getResource("/images/title_label-removebg-preview.png")));
 		applicationFormLabel.setBounds(340, 0, 422, 88);
-		frame.getContentPane().add(applicationFormLabel);
+		frmSkkuNewStudent.getContentPane().add(applicationFormLabel);
 
 		// stores the fields related to personal information
 		personalInfoPanel = new JPanel();
 		personalInfoPanel.setBounds(350, 88, 436, 295);
-		frame.getContentPane().add(personalInfoPanel);
+		frmSkkuNewStudent.getContentPane().add(personalInfoPanel);
 		personalInfoPanel.setLayout(new GridLayout(0, 2, 0, 10));
 
 		// create applicant name label and text area
@@ -125,6 +126,7 @@ public class ApplicationForm {
 		personalInfoPanel.add(nameLabel);
 
 		nameText = new JTextArea();
+		nameText.setFont(new Font("PingFang TC", Font.PLAIN, 12));
 		personalInfoPanel.add(nameText);
 
 		// create birth date label and text area
@@ -134,6 +136,7 @@ public class ApplicationForm {
 		personalInfoPanel.add(bdayLabel);
 
 		bdayText = new JTextArea();
+		bdayText.setFont(new Font("PingFang TC", Font.PLAIN, 12));
 		personalInfoPanel.add(bdayText);
 
 		// create email label and text area
@@ -143,6 +146,7 @@ public class ApplicationForm {
 		personalInfoPanel.add(emailLabel);
 
 		emailText = new JTextArea();
+		emailText.setFont(new Font("PingFang TC", Font.PLAIN, 12));
 		personalInfoPanel.add(emailText);
 
 		// create phone number label and text area
@@ -152,6 +156,7 @@ public class ApplicationForm {
 		personalInfoPanel.add(phoneLabel);
 
 		phoneText = new JTextArea();
+		phoneText.setFont(new Font("PingFang TC", Font.PLAIN, 12));
 		personalInfoPanel.add(phoneText);
 
 		// create degree label and text area
@@ -161,15 +166,21 @@ public class ApplicationForm {
 		personalInfoPanel.add(degressLabel);
 
 		degreeText = new JTextArea();
+		degreeText.setFont(new Font("PingFang TC", Font.PLAIN, 12));
 		personalInfoPanel.add(degreeText);
-		
+
+		// create intended major label and drop down menu
 		majorLabel = new JLabel("Intended Major:  ");
 		majorLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		majorLabel.setFont(new Font("PingFang TC", Font.PLAIN, 12));
 		personalInfoPanel.add(majorLabel);
-		
-		comboBox = new JComboBox();
-		personalInfoPanel.add(comboBox);
+
+		JComboBox<String> majorBox = new JComboBox<String>();
+		majorBox.setModel(new DefaultComboBoxModel<String>(
+				new String[] { "Choose a major", "Accounting", "Biology", "Computer Science", "Business", "Engineering",
+						"Education", "Math", "Nursing", "Physics", "Political Science" }));
+		majorBox.setFont(new Font("PingFang TC", Font.PLAIN, 12));
+		personalInfoPanel.add(majorBox);
 
 		// create previously attended university label and text area
 		prevUniLabel = new JLabel("Attended University (for Graduates):  ");
@@ -188,6 +199,7 @@ public class ApplicationForm {
 		personalInfoPanel.add(gpaLabel);
 
 		gpaText = new JTextArea();
+		gpaText.setFont(new Font("PingFang TC", Font.PLAIN, 12));
 		personalInfoPanel.add(gpaText);
 
 		// create home address label and text area
@@ -199,20 +211,21 @@ public class ApplicationForm {
 		addyText = new JTextArea();
 		addyText.setFont(new Font("PingFang TC", Font.PLAIN, 12));
 		personalInfoPanel.add(addyText);
-		
-		addyLabel_1 = new JLabel("Home Address:  ");
-		addyLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		addyLabel_1.setFont(new Font("PingFang TC", Font.PLAIN, 12));
-		personalInfoPanel.add(addyLabel_1);
-		
-		addyText_1 = new JTextArea();
-		addyText_1.setFont(new Font("PingFang TC", Font.PLAIN, 12));
-		personalInfoPanel.add(addyText_1);
+
+		// create country of origin label and text area
+		countryLabel = new JLabel("Country of Origin:  ");
+		countryLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		countryLabel.setFont(new Font("PingFang TC", Font.PLAIN, 12));
+		personalInfoPanel.add(countryLabel);
+
+		countryText = new JTextArea();
+		countryText.setFont(new Font("PingFang TC", Font.PLAIN, 12));
+		personalInfoPanel.add(countryText);
 
 		// create a personal statement panel
 		personalStatementPanel = new JPanel();
 		personalStatementPanel.setBounds(322, 400, 464, 305);
-		frame.getContentPane().add(personalStatementPanel);
+		frmSkkuNewStudent.getContentPane().add(personalStatementPanel);
 		personalStatementPanel.setLayout(null);
 
 		personalStatementLabel = new JLabel("Personal Statement");
@@ -226,9 +239,9 @@ public class ApplicationForm {
 		personalStatementText.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// if it is the applicant's first time clicking on the personal statement text area,
+				// if it is the applicant's first time clicking on the personal statement text area, 
 				// clear out the "At least 100 words" message
-				if(firstClick) {
+				if (firstClick) {
 					personalStatementText.setText("");
 					firstClick = false;
 					// change font to match the rest of the GUI
@@ -253,19 +266,21 @@ public class ApplicationForm {
 				String prevUni = prevUniText.getText();
 				String GPA = gpaText.getText();
 				String homeAddy = addyText.getText();
+				String country = countryText.getText();
 				String personalStatement = personalStatementText.getText();
 				int errorCount = 1;
 
 				try {
 					if (isValidName(applicantName) && isValidBday(birthDate) && isValidEmail(email)
 							&& isValidPhoneNumber(phoneNum) && isValidDegree(degree) && isValidAddy(homeAddy)
-							&& isValidPersonalStatement(personalStatement) && isValidCommunicationMode()) {
+							&& isValidPersonalStatement(personalStatement) && isValidCommunicationMode()
+							&& isValidMajor() && isValidCountry(country)) {
 
 						if (isValidGPA(GPA, degree) && isValidPrevUni(prevUni, degree)) {
 							JOptionPane.showMessageDialog(null, "Successfully Submitted", "Success!",
 									JOptionPane.INFORMATION_MESSAGE);
-							
-							//reset all fields
+
+							// reset all fields
 							nameText.setText("");
 							bdayText.setText("");
 							emailText.setText("");
@@ -273,14 +288,16 @@ public class ApplicationForm {
 							degreeText.setText("");
 							prevUniText.setText("");
 							gpaText.setText("");
+							majorBox.setSelectedIndex(0);
 							addyText.setText("");
+							countryText.setText("");
 							personalStatementText.setFont(new Font("Times New Roman", Font.ITALIC, 12));
 							personalStatementText.setText(" At least 100 words");
 							firstClick = true;
 							emailButton.setSelected(false);
 							mobileButton.setSelected(false);
 							noneButton.setSelected(false);
-							
+
 						} else {
 							throw new Exception();
 						}
@@ -327,9 +344,19 @@ public class ApplicationForm {
 							errorCount++;
 						}
 					}
+					// if an error exists in the major field
+					if (!isValidMajor()) {
+						errorMessage += errorCount + getMajorErrorMessage();
+						errorCount++;
+					}
 					// if error exists in the home address field
 					if (!isValidAddy(homeAddy)) {
 						errorMessage += errorCount + getAddyErrorMessage(homeAddy);
+						errorCount++;
+					}
+					// if an error exists in the country of origin field
+					if (!isValidCountry(country)) {
+						errorMessage += errorCount + getCountryErrorMessage(country);
 						errorCount++;
 					}
 					// if error exists in the personal statement field
@@ -338,7 +365,7 @@ public class ApplicationForm {
 						errorCount++;
 					}
 					// if error exists in the preferred mode of communication field
-					if(!isValidCommunicationMode()){
+					if (!isValidCommunicationMode()) {
 						errorMessage += errorCount + getValidCommModeMessage();
 						errorCount++;
 					}
@@ -350,11 +377,11 @@ public class ApplicationForm {
 		});
 		submitBtn.setFont(new Font("PingFang TC", Font.PLAIN, 12));
 		submitBtn.setBounds(474, 747, 164, 29);
-		frame.getContentPane().add(submitBtn);
+		frmSkkuNewStudent.getContentPane().add(submitBtn);
 
 		communicatonPanel = new JPanel();
 		communicatonPanel.setBounds(350, 706, 436, 40);
-		frame.getContentPane().add(communicatonPanel);
+		frmSkkuNewStudent.getContentPane().add(communicatonPanel);
 
 		communicationLabel = new JLabel("Preferred Mode of Communication:  ");
 		communicationLabel.setFont(new Font("PingFang TC", Font.PLAIN, 12));
@@ -376,8 +403,7 @@ public class ApplicationForm {
 
 	// checks if the name is valid
 	public boolean isValidName(String name) {
-		// the regex is alphabets + any white space + alphabets + checks if line end
-		// follows
+		// the regex is alphabets + any white space + alphabets + checks if line end follows
 		// if the name follows the regex pattern, return true
 		if (Pattern.matches("^[a-zA-Z]+\\s[a-zA-Z]+$", name)) {
 			return true;
@@ -389,7 +415,6 @@ public class ApplicationForm {
 	// get the error message for when the name field is invalid
 	public String getNameErrorMessage(String name) {
 		if (name.equals("")) {
-			// this is not working for some reason
 			return ". You forgot to fill the name text field. Please fill your name.\n";
 		} else if (name.split("\\s+").length > 2) {
 			return ". You entered more than two names. Please enter your first and last name.\n";
@@ -407,8 +432,7 @@ public class ApplicationForm {
 			int day = Integer.parseInt(bdayArray[1]);
 			int year = Integer.parseInt(bdayArray[2]);
 
-			// checks if the month is between 1 and 12, day is between 1 and 31, and year is
-			// between 1 and 2023
+			// checks if the month is between 1 and 12, day is between 1 and 31, and year is between 1 and 2023
 			if (month > 0 && month < 13 && day > 0 && day < 32 && year > 1899 && year < 2024) {
 				return true;
 			}
@@ -426,8 +450,7 @@ public class ApplicationForm {
 			int day = Integer.parseInt(bdayArray[1]);
 			int year = Integer.parseInt(bdayArray[2]);
 
-			// if the date is not within the date range of 01/01/1900-01/01/2023, return
-			// error message
+			// if the date is not within the date range of 01/01/1900-01/01/2023, return error message
 			if (!(month > 0 && month < 13 && day > 0 && day < 32 && year > 1899 && year < 2024)) {
 				return ". Birth date must be a valid date between 01/01/1900-01/01/2023.\n";
 			}
@@ -439,8 +462,7 @@ public class ApplicationForm {
 
 	// checks if the email is valid
 	public boolean isValidEmail(String email) {
-		// regex format is (combination of alphabet, numebers, and .) + @ + (alphabets)
-		// + . + (alphabets)
+		// regex format is (combination of alphabet, numebers, and .) + @ + (alphabets) + . + (alphabets)
 		if (Pattern.matches("^[A-Za-z0-9.]+@[A-Za-z]+.[A-Za-z]+$", email)) {
 			return true;
 		} else {
@@ -483,12 +505,25 @@ public class ApplicationForm {
 		return ". Degree must be either bachelor or PhD.\n";
 	}
 
+	// checks if the major selected is valid
+	public boolean isValidMajor() {
+		if (majorBox.getSelectedItem().equals("Choose a major")) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	// get the error message for when the degree field is invalid
+	public String getMajorErrorMessage() {
+		return ". Please select a major.\n";
+	}
+
 	// checks if the previous university attended is valid according to the degree
 	// selected
 	public boolean isValidPrevUni(String prevUni, String degree) {
 		if (degree.equalsIgnoreCase("phd")) {
-			// regex checks if previously attended university only contains alphabets and
-			// white spaces
+			// regex checks if previously attended university only contains alphabets and white spaces
 			if (Pattern.matches("^[a-zA-Z/\\s/]+$", prevUni)) {
 				return true;
 			} else {
@@ -500,7 +535,6 @@ public class ApplicationForm {
 				return true;
 			else
 				return false;
-
 		}
 		return false;
 	}
@@ -527,8 +561,7 @@ public class ApplicationForm {
 	// checks if the GPA is valid according to the degree selected
 	public boolean isValidGPA(String GPA, String degree) {
 		if (degree.equalsIgnoreCase("phd")) {
-			// if GPA only contains numbers and a decimal point and is between the range
-			// [0.0. 4.5], return true
+			// if GPA only contains numbers and a decimal point and is between the range [0.0. 4.5], return true
 			if (Pattern.matches("^[0-9.]+$", GPA) && Double.parseDouble(GPA) >= 0.0 && Double.parseDouble(GPA) <= 4.5) {
 				return true;
 			} else {
@@ -582,10 +615,28 @@ public class ApplicationForm {
 		}
 	}
 
+	// checks if the country of origin is valid
+	public boolean isValidCountry(String country) {
+		// regex checks if country only contains alphabets and white spaces
+		if (Pattern.matches("^[a-zA-Z\\s]+$", country)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// gets the error message when the country of origin field is invalid
+	public String getCountryErrorMessage(String country) {
+		if (country.equals("")) {
+			return ". Country of origin must be entered.\n";
+		} else {
+			return ". Enter a valid country name.\n";
+		}
+	}
+
 	// checks if the personal statement is valid
 	public boolean isValidPersonalStatement(String pStatement) {
-		// if the number of words for the personal statement is greater than 100, return
-		// true
+		// if the number of words for the personal statement is greater than 100, return true
 		if (pStatement.split("\\s+").length >= 100) {
 			return true;
 		} else {
@@ -606,14 +657,12 @@ public class ApplicationForm {
 		}
 
 		if (noneButton.isSelected()) {
-			// if "none" is selected, email and mobile must be not selected to be a valid
-			// mode of communication
+			// if "none" is selected, email and mobile must be not selected to be a valid mode of communication
 			if (!emailButton.isSelected() && !mobileButton.isSelected())
 				return true;
 			else
 				return false;
-		} // if either email or mobile is selected and none is not selected, the mode of
-			// communication is valid
+		} // if either email or mobile is selected and none is not selected, the mode of communication is valid
 		else {
 			if (emailButton.isSelected() || mobileButton.isSelected())
 				return true;
@@ -630,11 +679,10 @@ public class ApplicationForm {
 		}
 
 		if (noneButton.isSelected()) {
-			// if "none" is selected, email and mobile must be not selected to be a valid
-			// mode of communication
+			// if "none" is selected, email and mobile must be not selected to be a valid mode of communication
 			if (emailButton.isSelected() || mobileButton.isSelected())
 				return ". Uncompatible options for preferred mode of communication were chosen.\n";
-		} 
+		}
 		return "";
 	}
 }
