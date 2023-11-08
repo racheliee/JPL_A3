@@ -13,7 +13,10 @@ import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
+import java.util.regex.*;
 
 public class ApplicationForm {
 
@@ -175,36 +178,38 @@ public class ApplicationForm {
 
 		// create a personal statement panel
 		personalStatementPanel = new JPanel();
-		personalStatementPanel.setBounds(301, 363, 485, 352);
+		personalStatementPanel.setBounds(322, 373, 464, 352);
 		frame.getContentPane().add(personalStatementPanel);
 		personalStatementPanel.setLayout(null);
 
 		personalStatementLabel = new JLabel("Personal Statement");
 		personalStatementLabel.setFont(new Font("PingFang TC", Font.PLAIN, 13));
 		personalStatementLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		personalStatementLabel.setBounds(169, 6, 205, 33);
+		personalStatementLabel.setBounds(136, 6, 205, 33);
 		personalStatementPanel.add(personalStatementLabel);
 
 		personalStatementText = new JTextArea();
 		personalStatementText.setFont(new Font("Times New Roman", Font.ITALIC, 12));
 		personalStatementText.setText(" At least 100 words");
-		personalStatementText.setBounds(46, 34, 439, 300);
+		personalStatementText.setBounds(31, 33, 433, 300);
 		personalStatementPanel.add(personalStatementText);
 
 		// create submit button
 		submitBtn = new JButton("Submit Application");
 		submitBtn.addActionListener(new ActionListener() {
-			String applicantName = nameText.getText();
-			String birthDate = bdayText.getText();
-			String email = emailText.getText();
-			String phoneNum = phoneText.getText();
-			String degree = degreeText.getText();
-			String prevUni = prevUniText.getText();
-			String GPA = gpaText.getText();
-			String homeAddy = addyText.getText();
-			String personalStatement = personalStatementText.getText();
-
 			public void actionPerformed(ActionEvent arg0) {
+				String applicantName = nameText.getText();
+				String birthDate = bdayText.getText();
+				String email = emailText.getText();
+				String phoneNum = phoneText.getText();
+				String degree = degreeText.getText();
+				String prevUni = prevUniText.getText();
+				String GPA = gpaText.getText();
+				String homeAddy = addyText.getText();
+				String personalStatement = personalStatementText.getText();
+				int errorCount = 1;
+				
+				
 				try {
 					if (isValidName(applicantName) && isValidBday(birthDate) && isValidEmail(email)
 							&& isValidPhoneNumber(phoneNum) && isValidDegree(degree) && isValidAddy(homeAddy)
@@ -221,7 +226,100 @@ public class ApplicationForm {
 					}
 
 				} catch (Exception e) {
+					String errorMessage = "";
+					// if an error exists in the name field
+					if(!isValidName(applicantName)) {
+						if(applicantName == null) {
+							// this is not working for some reason
+							errorMessage += errorCount + ". You forgot to fill the name text field. Please fill your name.\n";
+							errorCount++;
+						}
+						else {
+							errorMessage += errorCount + ". You forgot to write your name or surname.\n";
+							errorCount++;
+						}
+					}
+					// if an error exists in the birth date field
+					if(!isValidBday(birthDate)) {
+						errorMessage += errorCount + ". Birth date must be in 'mm/dd/year' format.\n";
+						errorCount++;
+					}
+					
+					// if an error exists in the email field
+					if(!isValidEmail(email)) {
+						errorMessage += errorCount + ". Email must be in email@domain.TLD\n";
+						errorCount++;
+					}
+					
+					// if an error exists in the phone number field
+					if(!isValidPhoneNumber(phoneNum)) {
+						errorMessage += errorCount + ". Phone number must be in 'xx-xxxx-xxxx' format.\n";
+						errorCount++;
+					}
 
+					// if an error exists in the degree field
+					if(!isValidDegree(degree)) {
+						errorMessage += errorCount + ". Degree must be either 'Bachelor' or 'Graduate'.\n";
+						errorCount++;
+					}
+
+					// if an error exists in the previous university field
+					if(!isValidPrevUni(prevUni, degree)) {
+						if(degree.equalsIgnoreCase("phd")) {
+							if(prevUni == ""){
+								errorMessage += errorCount + ". For graduate students, previous university must be entered.\n";
+								errorCount++;
+							}else{
+								errorMessage += errorCount + ". Enter a proper univeristy name.\n";
+								errorCount++;
+							}
+						}
+						// if bachelor applicant entered previous university
+						else if(degree.equalsIgnoreCase("bachelor")){
+							if(prevUni != ""){
+								errorMessage += errorCount + ". For bachelor students, previous university is not needed.\n";
+								errorCount++;
+							}
+						}
+					}
+
+					// if an error exists in the GPA field
+					if(!isValidGPA(GPA, degree)) {
+						if(degree.equalsIgnoreCase("phd")) {
+							if(GPA == ""){
+								errorMessage += errorCount + ". For graduate students, GPA must be entered.\n";
+								errorCount++;
+							}else{
+								errorMessage += errorCount + ". GPA must be a number between 0.0 and 4.5.\n";
+								errorCount++;
+							}
+						}
+						// if bachelor applicant entered GPA 
+						else if (degree.equalsIgnoreCase("bachelor")){
+							if(GPA != ""){
+								errorMessage += errorCount + ". For bachelor students, GPA is not needed.\n";
+								errorCount++;
+							}
+						}
+						
+					}
+
+					if(!isValidAddy(homeAddy)){
+						if(homeAddy == ""){
+							errorMessage += errorCount + ". Home address must be entered.\n";
+							errorCount++;
+						}else{
+							errorMessage += errorCount + ". Home address must be in 'street, city, country' format.\n";
+							errorCount++;
+						}
+					}
+
+					if(!isValidPersonalStatement(personalStatement)){
+						errorMessage += errorCount + ". Personal statement must be at least 100 words.\n";
+						errorCount++;
+					}
+
+					JOptionPane.showMessageDialog(null, errorMessage, "You have the following problems", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -233,47 +331,113 @@ public class ApplicationForm {
 
 	// checks if the name is valid
 	public boolean isValidName(String name) {
-		return true;
+		// the regex is alphabets + any white space + alphabets + checks if line end follows
+		// if the name follows the regex pattern, return true
+		if (Pattern.matches("^[a-zA-Z]+\\s[a-zA-Z]+$", name)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	// checks if the bday is valid
 	public boolean isValidBday(String bday) {
-		return true;
+		// regex is two digits/two digits/four digits
+		if (Pattern.matches("^[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]$", bday)) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	// checks if the email is valid
 	public boolean isValidEmail(String email) {
-		return true;
+		if(Pattern.matches("^[\\w-\\.]+@[\\w-]+\\.+[\\w-]", email)) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	// checks if the phone number is valid
 	public boolean isValidPhoneNumber(String phoneNum) {
-		return true;
+		//regex format is xx-xxxx-xxxx (ex: 10-1234-1234)
+		if(Pattern.matches("^[0-9]{2}-[0-9]{4}-[0-9]{4}$", phoneNum)) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	// checks if the degree is valid
 	public boolean isValidDegree(String degree) {
-		return true;
+		// if entered degree is either bachelor or phd, the input is valid
+		if(degree.equalsIgnoreCase("bachelor") || degree.equalsIgnoreCase("phd")){
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	// checks if the previous university attended is valid according to the degree
 	// selected
 	public boolean isValidPrevUni(String prevUni, String degree) {
-		return true;
+		if(degree.equalsIgnoreCase("phd")) {
+			//regex checks if previously attended university only contains alphabets and white spaces 
+			if(Pattern.matches("^[a-zA-Z/\\s/]+$", prevUni)) {
+				return true;
+			}else {
+				return false;
+			}
+		}else if (degree.equalsIgnoreCase("bachelor")) {
+			// bachelor applicants do not need to enter their previously attended university
+			if(prevUni == "") return true;
+			else return false;
+			
+		}
+		return false;
 	}
 
 	// checks if the GPA is valid according to the degree selected
 	public boolean isValidGPA(String GPA, String degree) {
-		return true;
+		if(degree.equalsIgnoreCase("phd")) {
+			//if GPA only contains numbers and a decimal point and is between the range [0.0. 4.5], return true
+			if(Pattern.matches("^[0-9.]+$", GPA) && Double.parseDouble(GPA) >= 0.0 && Double.parseDouble(GPA) <= 4.5) {
+				return true;
+			}else {
+				return false;
+			}
+		}else if (degree.equalsIgnoreCase("bachelor")) {
+			// bachelor applicants do not need to enter their GPA
+			if(GPA == "") return true;
+			else return false;
+			
+		}
+		return false;
 	}
 
 	// checks if the home address is valid
 	public boolean isValidAddy(String addy) {
-		return true;
+		// address format should be street, city, country (all in alphabets
+		if(Pattern.matches("^[\\w,]+\\s[\\w,]+\\s[\\w,]+$", addy)) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	// checks if the personal statement is valid
 	public boolean isValidPersonalStatement(String pStatement) {
-		return true;
+		// if the number of words for the personal statement is greater than 100, return
+		// true
+		if (pStatement.split("\\s+").length >= 100) {
+			return true;
+		} else {
+			return false;
+		}
 	}
+	
+	//empty strings == "" doesn't work
+	//issue with the email delimeter idk why
 }
